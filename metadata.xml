@@ -5,7 +5,7 @@
     <id>3490391084</id>
     <description>	This mod allows you to practice any boss with any character and with any randomized amounts of items that you want.
 	Character/Item/Boss configuration is done through the mod config menu, and the practice run can be started as a custom challenge where achievements are disabled.</description>
-    <version>1.4</version>
+    <version>1.5</version>
     <visibility>Public</visibility>
     <tag id="Lua"/>
     <tag id="Challenges"/>

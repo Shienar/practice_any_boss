@@ -36,6 +36,11 @@ local function loadData()
     end
 end
 
+--Used for J&E collectibles
+function count(base, pattern)
+	return select(2, string.gsub(base, pattern, ""))
+end
+
 local function onStart(a, isContinued)
 	
 	loadData()
@@ -57,6 +62,66 @@ local function onStart(a, isContinued)
 		Isaac.ExecuteCommand("combo 4."..options.angelItemCount) --Angel Items
 		Isaac.ExecuteCommand("combo 5."..options.secretItemCount) --Secret Items
 		Isaac.ExecuteCommand("combo 26."..options.planetariumItemCount) --Planetarium Items		
+		
+		--J&E Special case
+		if options.currentCharacterID == 19 then
+				
+			--The characters' healths are messed up after using ChangePlayerType() to J&E, so
+			--we need to manually fix them. Esau's will be fixed here, and Jacob's will 
+			--get fixed before he receives his items.
+			local Jacob = Isaac.GetPlayer().GetMainTwin(Isaac.GetPlayer())
+			local Esau = Jacob.GetOtherTwin(Jacob)
+			while Esau.GetBlackHearts(Esau) ~= 0 do Esau.AddBlackHearts(Esau, -1) end
+			while Esau.GetSoulHearts(Esau) > 2 do Esau.AddSoulHearts(Esau, -1) end
+			while Esau.GetSoulHearts(Esau) < 2 do Esau.AddSoulHearts(Esau, 1) end
+			while Esau.GetMaxHearts(Esau) > 2 do Esau.AddMaxHearts(Esau, -1) end
+			
+			--Give each character a random, unique set of items.
+			--There doesn't exist a "combo2" command, so I'm forced to do this.
+			
+			--collectibleList will become a new-line seperated list of Jacob's items.
+			local collectibleList = Isaac.ExecuteCommand("listcollectibles")
+			collectibleList = string.gsub(collectibleList, ",", "")
+			collectibleList = string.gsub(collectibleList, ":%d", "\n")
+			
+			--collectibleTable will become a multi-string table of each collectible
+			local pos,collectibleTable = 0,{}
+			for st,sp in function() return string.find(collectibleList, "\n", pos, true) end do
+				table.insert(collectibleTable, string.sub(collectibleList, pos, st - 1))
+				pos = sp + 1
+			end
+			table.insert(collectibleTable, string.sub(collectibleList, pos))
+				
+			--Remove all of jacob's items and give them to esau
+			for k, v in pairs(collectibleTable) do
+				Isaac.ExecuteCommand("giveitem2 "..v)
+				Isaac.ExecuteCommand("remove "..v)
+			end
+			
+			--Fix Jacob's health.
+			while Jacob.GetBlackHearts(Jacob) ~= 0 do Jacob.AddBlackHearts(Jacob, -1) end
+			while Jacob.GetBoneHearts(Jacob) ~= 0 do Jacob.AddBoneHearts(Jacob, -1) end
+			while Jacob.GetBrokenHearts(Jacob) ~= 0 do Jacob.AddBrokenHearts(Jacob, -1) end
+			while Jacob.GetRottenHearts(Jacob) ~= 0 do Jacob.AddRottenHearts(Jacob, -1) end
+			while Jacob.GetMaxHearts(Jacob) > 6 do Jacob.AddMaxHearts(Jacob, -1) end
+			while Jacob.GetMaxHearts(Jacob) < 6 do Jacob.AddMaxHearts(Jacob, 1) end
+			
+			--Re-generate Jacob's items.
+			Isaac.ExecuteCommand("combo 0."..options.treasureItemCount) --Treasure Items
+			Isaac.ExecuteCommand("combo 1."..options.shopItemCount) --Shop Items
+			Isaac.ExecuteCommand("combo 2."..options.bossItemCount) --Boss Items
+			Isaac.ExecuteCommand("combo 3."..options.devilItemCount) --Devil Items
+			Isaac.ExecuteCommand("combo 4."..options.angelItemCount) --Angel Items
+			Isaac.ExecuteCommand("combo 5."..options.secretItemCount) --Secret Items
+			Isaac.ExecuteCommand("combo 26."..options.planetariumItemCount) --Planetarium Items	
+			
+			
+			Jacob.SetFullHearts(Jacob)
+			Esau.SetFullHearts(Esau) 
+		else
+			Isaac.GetPlayer().SetFullHearts(Isaac.GetPlayer())
+		end
+		
 		
 		--stage
 		stage = options.bossStage[options.currentBoss][math.random(1, #options.bossStage[options.currentBoss])]
