@@ -10,7 +10,8 @@ options.secretItemCount = 0
 options.planetariumItemCount = 0
 
 --These are what the player scrolls through.
-options.characters = {"Isaac", "Magdalene", "Cain", "Judas", "???", "Eve", "Samson", "Azazel", "Lazarus", "Eden", "The Lost", "Lilith", "Keeper", "Apollyon", "The Forgotten", "Bethany", "Jacob and Esau", "T. Isaac", "T. Magdalene", "T. Cain", "T. Judas", "T. ???", "T. Eve", "T. Samson", "T. Azazel", "T. Lazarus", "T. Eden", "T. Lost", "T. Lilith", "T. Keeper", "T. Apollyon", "T. Forgotten", "T. Bethany", "T. Jacob and Esau"}options.bossNameArray = {"Monstro", "Gemini", "Steven",  "Dingle", "Gurglings", "Larry Jr.", "Duke of Flies", "Widow", "Blighted Ovum,", "The Haunt", "Pin", "Famine", "Fistula", "Chub", "C.H.A.D.", "Gurdy", "Mega Fatty", "Mega Maw", "Gurdy Jr.", "Peep", "The Husk", "The Hollow", "Carrion Queen", "Dark One", "Polycephalus", "The Wretched","Pestilence", "Monstro II", "Gish", "The Cage", "The Gate", "Loki", "The Adversary", "The Bloat", "Mask of Infamy", "War", "Blastocyst", "Mama Gurdy", "Scolex", "Mr. Fred", "Lokii", "Daddy Long Legs", "Triachnid", "Teratoma", "Death", "Conquest", "Headless Horseman", "Dangle", "Turdlings", "Little Horn", "Rag Man", "The Stain", "The Forsaken", "The Fallen", "The Frail", "Brownie", "Big Horn", "Rag Mega", "Sisters Vis", "The Matriarch", "Baby Plum", "Bumbino","Reap Creep", "The Pile", "The Rainmaker", "Min-Min", "Lil Blub", "Wormwood", "Clog", "Colostomia", "Turdlet", "Tuff Twins", "Hornfel", "Great Gideon", "Singe", "The Shell", "Clutch", "The Siren", "The Heretic", "The Visage", "The Horny Boys", "Chimera", "The Scourge", "Rotgut", "Mom", "Mom's Heart", "It Lives", "Satan", "Isaac", "The Lamb", "???", "Mega Satan", "Hush", "Delirium", "Mother", "Home", "Boss Rush"}                     
+options.characters = {"Isaac", "Magdalene", "Cain", "Judas", "???", "Eve", "Samson", "Azazel", "Lazarus", "Eden", "The Lost", "Lilith", "Keeper", "Apollyon", "The Forgotten", "Bethany", "Jacob and Esau", "T. Isaac", "T. Magdalene", "T. Cain", "T. Judas", "T. ???", "T. Eve", "T. Samson", "T. Azazel", "T. Lazarus", "T. Eden", "T. Lost", "T. Lilith", "T. Keeper", "T. Apollyon", "T. Forgotten", "T. Bethany", "T. Jacob and Esau"}
+options.numberOfCharacters = 34 -- Increased when modded characters are detected.options.bossNameArray = {"Monstro", "Gemini", "Steven",  "Dingle", "Gurglings", "Larry Jr.", "Duke of Flies", "Widow", "Blighted Ovum,", "The Haunt", "Pin", "Famine", "Fistula", "Chub", "C.H.A.D.", "Gurdy", "Mega Fatty", "Mega Maw", "Gurdy Jr.", "Peep", "The Husk", "The Hollow", "Carrion Queen", "Dark One", "Polycephalus", "The Wretched","Pestilence", "Monstro II", "Gish", "The Cage", "The Gate", "Loki", "The Adversary", "The Bloat", "Mask of Infamy", "War", "Blastocyst", "Mama Gurdy", "Scolex", "Mr. Fred", "Lokii", "Daddy Long Legs", "Triachnid", "Teratoma", "Death", "Conquest", "Headless Horseman", "Dangle", "Turdlings", "Little Horn", "Rag Man", "The Stain", "The Forsaken", "The Fallen", "The Frail", "Brownie", "Big Horn", "Rag Mega", "Sisters Vis", "The Matriarch", "Baby Plum", "Bumbino","Reap Creep", "The Pile", "The Rainmaker", "Min-Min", "Lil Blub", "Wormwood", "Clog", "Colostomia", "Turdlet", "Tuff Twins", "Hornfel", "Great Gideon", "Singe", "The Shell", "Clutch", "The Siren", "The Heretic", "The Visage", "The Horny Boys", "Chimera", "The Scourge", "Rotgut", "Mom", "Mom's Heart", "It Lives", "Satan", "Isaac", "The Lamb", "???", "Mega Satan", "Hush", "Delirium", "Mother", "Home", "Boss Rush"}                     
 --These are linked to the character array and are used to swap to a specific character.
 options.characterIDs = {}
 options.characterIDs["Isaac"] = 0
@@ -250,5 +251,23 @@ options.bossStage["Delirium"] = {"12"}
 options.bossStage["Mother"] = {"8c"}
 options.bossStage["Home"] = {"13a"}
 options.bossStage["Boss Rush"] = {"6", "6a", "6b"}
+
+function options.resetDefaults()
+	options.treasureItemCount = 0
+	options.bossItemCount = 0
+	options.shopItemCount = 0
+	options.devilItemCount = 0
+	options.angelItemCount = 0
+	options.secretItemCount = 0
+	options.planetariumItemCount = 0
+	
+	options.characters = {"Isaac", "Magdalene", "Cain", "Judas", "???", "Eve", "Samson", "Azazel", "Lazarus", "Eden", "The Lost", "Lilith", "Keeper", "Apollyon", "The Forgotten", "Bethany", "Jacob and Esau", "T. Isaac", "T. Magdalene", "T. Cain", "T. Judas", "T. ???", "T. Eve", "T. Samson", "T. Azazel", "T. Lazarus", "T. Eden", "T. Lost", "T. Lilith", "T. Keeper", "T. Apollyon", "T. Forgotten", "T. Bethany", "T. Jacob and Esau"}
+	options.currentCharacter = options.characters[1]
+	options.currentCharacterID = options.characterIDs[options.characters[1]]
+	options.numberOfCharacters = 34
+	
+	options.currentBoss = options.bossNameArray[1]
+	
+end
 
 return options

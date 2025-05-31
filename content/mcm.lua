@@ -25,7 +25,7 @@ MCM.AddSetting(category, {
 		return getTableIndex(options.characters, options.currentCharacter)
 	end,
 	Minimum = 1,
-	Maximum = 34,
+	Maximum = options.numberOfCharacters,
 	Display = function()
 		return "Character: " .. options.currentCharacter
 	end,
@@ -218,6 +218,29 @@ MCM.AddSetting(category, {
 		
 	end,
 		Info = { "This is the boss that you will be teleported to when you start the challenge." }
+
+})
+
+MCM.AddSpace(category)
+
+--Reset to Defaults
+MCM.AddSetting(category, {
+    Type = ModConfigMenu.OptionType.BOOLEAN,
+
+    CurrentSetting = function()
+        return false
+    end,
+
+    Display = function()
+        return "RESET ALL SETTINGS"
+    end,
+
+    OnChange = function(boolean)
+		options.resetDefaults()
+		return true
+    end,
+
+    Info = { "RESET ALL SETTINGS TO DEFAULT" }
 })
 
 

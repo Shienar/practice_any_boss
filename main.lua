@@ -8,10 +8,12 @@ if ModConfigMenu then
     require("content.mcm")
 end
 
-
 local function saveData()
 	save.currentCharacter = options.currentCharacter
 	save.currentCharacterID = options.currentCharacterID
+	save.characters = options.characters
+	save.numberOfCharacters = options.numberOfCharacters
+	
 	save.treasureItemCount = options.treasureItemCount
 	save.bossItemCount = options.bossItemCount
 	save.shopItemCount = options.shopItemCount
@@ -19,11 +21,34 @@ local function saveData()
 	save.angelItemCount = options.angelItemCount
 	save.secretItemCount = options.secretItemCount 
 	save.planetariumItemCount = options.planetariumItemCount
+	
 	save.currentBoss = options.currentBoss
 	
 	practiceMod:SaveData(json.encode(save))
 	
 
+end
+
+local function detectModdedCharacters()
+	if Isaac.GetPlayer().GetPlayerType(Isaac.GetPlayer()) > 40 then
+		
+		--The current character is modded
+		
+		for k, v in pairs(options.characters) do
+			if v == Isaac.GetPlayer().GetName(Isaac.GetPlayer()) then
+				return
+			end
+		end
+		
+		
+		--The current character is not in the options list
+		
+		options.characters[options.numberOfCharacters] = Isaac.GetPlayer().GetName(Isaac.GetPlayer())
+		options.numberOfCharacters = options.numberOfCharacters + 1
+		options.characterIDs[tostring(Isaac.GetPlayer().GetName(Isaac.GetPlayer()))] = Isaac.GetPlayer().GetPlayerType(Isaac.GetPlayer())
+		
+		saveData()
+	end
 end
 
 local function loadData()
@@ -36,16 +61,12 @@ local function loadData()
     end
 end
 
---Used for J&E collectibles
-function count(base, pattern)
-	return select(2, string.gsub(base, pattern, ""))
-end
 
 local function onStart(a, isContinued)
 	
 	loadData()
 	
-	
+	detectModdedCharacters()
 	
 	if Isaac.GetChallenge() == challenge_id and isContinued == false then
 
@@ -137,7 +158,7 @@ local function onStart(a, isContinued)
 end
 
 --trophy spawn
-local function onRoomClear(Entity)
+local function spawnTrophy(Entity)
 	
 	if Isaac.GetChallenge() == challenge_id then
 		Isaac.ExecuteCommand("spawn 5.370")
@@ -147,7 +168,6 @@ local function onRoomClear(Entity)
 	return nil
 end
 
-
 practiceMod:AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, saveData)
 practiceMod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, onStart)
-practiceMod:AddCallback(ModCallbacks.MC_PRE_SPAWN_CLEAN_AWARD, onRoomClear)
+practiceMod:AddCallback(ModCallbacks.MC_PRE_SPAWN_CLEAN_AWARD, spawnTrophy)
