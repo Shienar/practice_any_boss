@@ -40,13 +40,15 @@ local function onStart(a, isContinued)
 	
 	loadData()
 	
-	--character
-	if options.currentCharacterID ~= nil then
-		Isaac.GetPlayer().ChangePlayerType(Isaac.GetPlayer(), options.currentCharacterID)
-	end
+	
 	
 	if Isaac.GetChallenge() == challenge_id and isContinued == false then
 
+		--character
+		if options.currentCharacterID ~= nil then
+			Isaac.GetPlayer().ChangePlayerType(Isaac.GetPlayer(), options.currentCharacterID)
+		end
+	
 		--items
 		Isaac.ExecuteCommand("combo 0."..options.treasureItemCount) --Treasure Items
 		Isaac.ExecuteCommand("combo 1."..options.shopItemCount) --Shop Items
