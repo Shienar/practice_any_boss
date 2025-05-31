@@ -76,9 +76,10 @@ local function onRoomClear(Entity)
 	
 	if Isaac.GetChallenge() == challenge_id then
 		Isaac.ExecuteCommand("spawn 5.370")
+		return true
 	end
 	
-	return true
+	return nil
 end
 
 
