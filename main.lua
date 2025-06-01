@@ -12,7 +12,12 @@ local function saveData()
 	save.currentCharacter = options.currentCharacter
 	save.currentCharacterID = options.currentCharacterID
 	save.characters = options.characters
-	save.numberOfCharacters = options.numberOfCharacters
+	
+	save.moddedCharName = options.moddedCharName
+	save.moddedCharID = options.moddedCharID
+	save.moddedCharID_T = options.moddedCharID_T
+	save.useModded = options.useModded	
+	save.useTainted = options.useTainted
 	
 	save.treasureItemCount = options.treasureItemCount
 	save.bossItemCount = options.bossItemCount
@@ -29,28 +34,6 @@ local function saveData()
 
 end
 
-local function detectModdedCharacters()
-	if Isaac.GetPlayer().GetPlayerType(Isaac.GetPlayer()) > 40 then
-		
-		--The current character is modded
-		
-		for k, v in pairs(options.characters) do
-			if v == Isaac.GetPlayer().GetName(Isaac.GetPlayer()) then
-				return
-			end
-		end
-		
-		
-		--The current character is not in the options list
-		
-		options.characters[options.numberOfCharacters] = Isaac.GetPlayer().GetName(Isaac.GetPlayer())
-		options.numberOfCharacters = options.numberOfCharacters + 1
-		options.characterIDs[tostring(Isaac.GetPlayer().GetName(Isaac.GetPlayer()))] = Isaac.GetPlayer().GetPlayerType(Isaac.GetPlayer())
-		
-		saveData()
-	end
-end
-
 local function loadData()
 	if practiceMod:HasData() then
         save = json.decode(practiceMod:LoadData())
@@ -61,12 +44,35 @@ local function loadData()
     end
 end
 
+local function detectModdedCharacters()
+	if Isaac.GetPlayer().GetPlayerType(Isaac.GetPlayer()) > 40 then
+		options.moddedCharName = Isaac.GetPlayer().GetName(Isaac.GetPlayer())
+		options.moddedCharID = Isaac.GetPlayerTypeByName(options.moddedCharName, false)
+		options.moddedCharID_T = Isaac.GetPlayerTypeByName(options.moddedCharName, true)
+		
+		saveData()
+	end
+end
+
+
+
 --Handles character changes
 local function onInit(player)
 
 	loadData()
+	
+	
 	if Isaac.GetChallenge() == challenge_id and options.currentCharacterID ~= nil then
+		--                       Checks if the mod is still installed
+		if options.useModded and Isaac.GetPlayerTypeByName(options.moddedCharName, false) ~= -1then		
+			if options.useTainted == true then
+				Isaac.GetPlayer().ChangePlayerType(Isaac.GetPlayer(), options.moddedCharID_T)
+			else
+				Isaac.GetPlayer().ChangePlayerType(Isaac.GetPlayer(), options.moddedCharID)
+			end
+		else
 			Isaac.GetPlayer().ChangePlayerType(Isaac.GetPlayer(), options.currentCharacterID)
+		end
 	end
 end
 

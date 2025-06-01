@@ -25,7 +25,7 @@ MCM.AddSetting(category, {
 		return getTableIndex(options.characters, options.currentCharacter)
 	end,
 	Minimum = 1,
-	Maximum = options.numberOfCharacters,
+	Maximum = 34,
 	Display = function()
 		return "Character: " .. options.currentCharacter
 	end,
@@ -35,6 +35,39 @@ MCM.AddSetting(category, {
 		
 	end,
 		Info = { "This is the character that you will play as when you start the challenge." }
+})
+
+ModConfigMenu.AddSetting(category, {
+    Type = ModConfigMenu.OptionType.BOOLEAN,
+    CurrentSetting = function()
+      return options.useModded
+    end,
+    Display = function()
+      return "Use Modded Character ("..options.moddedCharName.."): " .. (options.useModded and "True" or "False")
+    end,
+    OnChange = function(b)
+      options.useModded = b
+    end,
+    Info = {
+		"Overrides the above selection to use a modded character",
+		"This option is filled with the last modded character you started a run with"
+	}
+})
+
+ModConfigMenu.AddSetting(category, {
+    Type = ModConfigMenu.OptionType.BOOLEAN,
+    CurrentSetting = function()
+      return options.useTainted
+    end,
+    Display = function()
+      return "Tainted Modded: ".. (options.useTainted and "True" or "False")
+    end,
+    OnChange = function(b)
+      options.useTainted = b
+    end,
+    Info = {
+		"Uses the tainted version of the modded character."
+	}
 })
 
 MCM.AddSpace(category)
