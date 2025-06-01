@@ -61,20 +61,23 @@ local function loadData()
     end
 end
 
+--Handles character changes
+local function onInit(player)
 
-local function onStart(a, isContinued)
-	
 	loadData()
-	
+	if Isaac.GetChallenge() == challenge_id and options.currentCharacterID ~= nil then
+			Isaac.GetPlayer().ChangePlayerType(Isaac.GetPlayer(), options.currentCharacterID)
+	end
+end
+
+--Handles items, stage, boss
+local function onStart(a, isContinued)
+
+	loadData()
 	detectModdedCharacters()
 	
 	if Isaac.GetChallenge() == challenge_id and isContinued == false then
-
-		--character
-		if options.currentCharacterID ~= nil then
-			Isaac.GetPlayer().ChangePlayerType(Isaac.GetPlayer(), options.currentCharacterID)
-		end
-	
+		
 		--items
 		Isaac.ExecuteCommand("combo 0."..options.treasureItemCount) --Treasure Items
 		Isaac.ExecuteCommand("combo 1."..options.shopItemCount) --Shop Items
@@ -143,7 +146,6 @@ local function onStart(a, isContinued)
 			Isaac.GetPlayer().SetFullHearts(Isaac.GetPlayer())
 		end
 		
-		
 		--stage
 		stage = options.bossStage[options.currentBoss][math.random(1, #options.bossStage[options.currentBoss])]
 		Isaac.ExecuteCommand("stage "..stage)
@@ -153,7 +155,6 @@ local function onStart(a, isContinued)
 		if bossRoom ~= -1 then
 			Isaac.ExecuteCommand("goto s.boss."..bossRoom)
 		end
-		
 	end
 end
 
@@ -170,4 +171,5 @@ end
 
 practiceMod:AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, saveData)
 practiceMod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, onStart)
+practiceMod:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, onInit)
 practiceMod:AddCallback(ModCallbacks.MC_PRE_SPAWN_CLEAN_AWARD, spawnTrophy)

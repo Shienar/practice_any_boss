@@ -4,8 +4,16 @@
     <directory>practice_any_boss</directory>
     <id>3490391084</id>
     <description>	This mod allows you to practice any boss with any character and with any randomized amounts of items that you want.
-	Character/Item/Boss configuration is done through the mod config menu, and the practice run can be started as a custom challenge where achievements are disabled.</description>
-    <version>1.5</version>
+	Character/Item/Boss configuration is done through the mod config menu, and the practice run can be started as a custom challenge where achievements are disabled.
+
+	Mod Compatibility (WIP):
+	- Modded characters will get added to the option list when a run is started with them, and they will be removed from the list if you ever &quot;reset to defaults&quot;
+	- Modded characters will remain on the option list after you remove their mod, but the option will no longer work (even if you re-enable the mod), so you should &quot;reset to defaults&quot; to remove broken options.
+
+Known Issues:
+	- Modded Characters will overwrite Tainted Jacob/Esau's option.
+	- Delirium won't be able to transform into another boss since you haven't encountered any other bosses during the run.</description>
+    <version>1.7</version>
     <visibility>Public</visibility>
     <tag id="Lua"/>
     <tag id="Challenges"/>
