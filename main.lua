@@ -61,15 +61,11 @@ local function onInit(player)
 
 	loadData()
 	
-	
 	if Isaac.GetChallenge() == challenge_id and options.currentCharacterID ~= nil then
-		--                       Checks if the mod is still installed
-		if options.useModded and Isaac.GetPlayerTypeByName(options.moddedCharName, false) ~= -1then		
-			if options.useTainted == true then
-				Isaac.GetPlayer().ChangePlayerType(Isaac.GetPlayer(), options.moddedCharID_T)
-			else
-				Isaac.GetPlayer().ChangePlayerType(Isaac.GetPlayer(), options.moddedCharID)
-			end
+		if options.useModded == true and options.useTainted == true and Isaac.GetPlayerTypeByName(options.moddedCharName, true) ~= -1 then		
+			Isaac.GetPlayer().ChangePlayerType(Isaac.GetPlayer(), options.moddedCharID_T)
+		elseif options.useModded == true and options.useTainted == false and Isaac.GetPlayerTypeByName(options.moddedCharName, false) ~= -1 then
+			Isaac.GetPlayer().ChangePlayerType(Isaac.GetPlayer(), options.moddedCharID)
 		else
 			Isaac.GetPlayer().ChangePlayerType(Isaac.GetPlayer(), options.currentCharacterID)
 		end
