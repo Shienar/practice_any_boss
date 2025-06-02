@@ -219,7 +219,7 @@ MCM.AddSetting(category, {
     end,
 
     Minimum = 0,
-    Maximum = 25,
+    Maximum = 11,
 
     Display = function()
         return "Planetarium Items: " .. options.planetariumItemCount

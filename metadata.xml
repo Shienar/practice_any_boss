@@ -14,7 +14,7 @@ Mod Compatibility (WIP):
 
 Known Issues:
 - Delirium won't be able to transform into another boss since you haven't encountered any other bosses during the run.</description>
-    <version>1.8</version>
+    <version>1.9</version>
     <visibility>Public</visibility>
     <tag id="Lua"/>
     <tag id="Challenges"/>

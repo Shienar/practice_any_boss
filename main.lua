@@ -66,7 +66,8 @@ local function onInit(player)
 			Isaac.GetPlayer().ChangePlayerType(Isaac.GetPlayer(), options.moddedCharID_T)
 		elseif options.useModded == true and options.useTainted == false and Isaac.GetPlayerTypeByName(options.moddedCharName, false) ~= -1 then
 			Isaac.GetPlayer().ChangePlayerType(Isaac.GetPlayer(), options.moddedCharID)
-		else
+		elseif options.currentCharacterID ~= PlayerType.PLAYER_JACOB and options.currentCharacterID ~= PlayerType.PLAYER_THEFORGOTTEN_B then
+			--Change to vanilla character that isn't a special case.
 			Isaac.GetPlayer().ChangePlayerType(Isaac.GetPlayer(), options.currentCharacterID)
 		end
 	end
@@ -79,6 +80,90 @@ local function onStart(a, isContinued)
 	detectModdedCharacters()
 	
 	if Isaac.GetChallenge() == challenge_id and isContinued == false then
+		
+		--Fix some vanilla character starting health/items/pickups/etc
+		while Isaac.GetPlayer().GetNumBombs(Isaac.GetPlayer()) > 0 do Isaac.GetPlayer().AddBombs(Isaac.GetPlayer(), -1) end
+		while Isaac.GetPlayer().GetNumCoins(Isaac.GetPlayer()) > 0 do Isaac.GetPlayer().AddCoins(Isaac.GetPlayer(), -1) end
+		while Isaac.GetPlayer().GetNumKeys(Isaac.GetPlayer()) > 0 do Isaac.GetPlayer().AddKeys(Isaac.GetPlayer(), -1) end
+		
+		local rng = RNG() -- required for familiars for Lilith / tainted forgotten
+		
+		if options.currentCharacterID == PlayerType.PLAYER_ISAAC then
+			Isaac.ExecuteCommand("g d6")
+			Isaac.GetPlayer().AddBombs(Isaac.GetPlayer(), 1)
+		elseif options.currentCharacterID == PlayerType.PLAYER_MAGDALENE then
+			Isaac.GetPlayer():AddMaxHearts(2)
+		elseif options.currentCharacterID == PlayerType.PLAYER_CAIN then
+			Isaac.GetPlayer():AddMaxHearts(-2)
+			Isaac.GetPlayer().AddKeys(Isaac.GetPlayer(), 1)
+			Isaac.ExecuteCommand("g paper clip")
+		elseif options.currentCharacterID == PlayerType.PLAYER_JUDAS then
+			Isaac.GetPlayer().AddCoins(Isaac.GetPlayer(), 3)
+			Isaac.GetPlayer():AddMaxHearts(-4)
+		elseif options.currentCharacterID == PlayerType.PLAYER_BLUEBABY then
+			Isaac.GetPlayer():AddSoulHearts(5)
+		elseif options.currentCharacterID == PlayerType.PLAYER_EVE then
+			Isaac.ExecuteCommand("g razor blade")
+			Isaac.GetPlayer():AddMaxHearts(-2)
+		elseif options.currentCharacterID == PlayerType.PLAYER_SAMSON then
+			Isaac.ExecuteCommand("g child's heart")
+		elseif options.currentCharacterID == PlayerType.PLAYER_AZAZEL or options.currentCharacterID == PlayerType.PLAYER_AZAZEL_B then
+			Isaac.GetPlayer():AddMaxHearts(-6)
+			Isaac.GetPlayer():AddBlackHearts(6)
+		elseif options.currentCharacterID == PlayerType.PLAYER_EDEN or options.currentCharacterID == PlayerType.PLAYER_EDEN_B then
+			Isaac.GetPlayer().AddCoins(Isaac.GetPlayer(), math.random(0, 5))
+			Isaac.GetPlayer().AddKeys(Isaac.GetPlayer(), math.random(0, 1))
+			Isaac.GetPlayer().AddBombs(Isaac.GetPlayer(), math.random(0, 2))
+		elseif options.currentCharacterID == PlayerType.PLAYER_LILITH or options.currentCharacterID == PlayerType.PLAYER_LILITH_B then
+			Isaac.GetPlayer():AddMaxHearts(-4)
+			Isaac.GetPlayer():AddBlackHearts(4)
+			Isaac.GetPlayer().CheckFamiliar(Isaac.GetPlayer(), FamiliarVariant.INCUBUS, 1, rng)
+		elseif options.currentCharacterID == PlayerType.PLAYER_KEEPER then
+			Isaac.ExecuteCommand("g wooden nickel")
+			Isaac.ExecuteCommand("g store key")
+			Isaac.GetPlayer().AddKeys(Isaac.GetPlayer(), 1)
+			Isaac.GetPlayer().AddBombs(Isaac.GetPlayer(), 1)
+		elseif options.currentCharacterID == PlayerType.PLAYER_THEFORGOTTEN then
+			Isaac.GetPlayer().AddSoulHearts(Isaac.GetPlayer(), 2)
+			Isaac.GetPlayer():AddBoneHearts(-1)
+		elseif options.currentCharacterID == PlayerType.PLAYER_BETHANY then
+			Isaac.GetPlayer():AddSoulCharge(4)
+		elseif options.currentCharacterID == PlayerType.PLAYER_JACOB then
+			--J&E special case: The game will crash if you do this on player initialization.
+			--A lot of other stuff is done later. These two require a lot of extra work.
+			Isaac.GetPlayer().ChangePlayerType(Isaac.GetPlayer(), options.currentCharacterID)
+		elseif options.currentCharacterID == PlayerType.PLAYER_ISAAC_B then
+			Isaac.GetPlayer().AddBombs(Isaac.GetPlayer(), 1)
+		elseif options.currentCharacterID == PlayerType.PLAYER_MAGDALENE_B then
+			Isaac.GetPlayer().AddMaxHearts(Isaac.GetPlayer(), 2)
+		elseif options.currentCharacterID == PlayerType.PLAYER_CAIN_B then
+			Isaac.GetPlayer().AddKeys(Isaac.GetPlayer(), 1)
+		elseif options.currentCharacterID == PlayerType.PLAYER_JUDAS_B then
+			Isaac.GetPlayer():AddMaxHearts(-6)
+			Isaac.GetPlayer():AddBlackHearts(4)
+			Isaac.GetPlayer().AddCoins(Isaac.GetPlayer(), 3)
+		elseif options.currentCharacterID == PlayerType.PLAYER_BLUEBABY_B then
+			Isaac.GetPlayer():AddSoulHearts(5)
+			Isaac.GetPlayer():AddPoopMana(3)
+		elseif options.currentCharacterID == PlayerType.PLAYER_EVE_B or options.currentCharacterID == PlayerType.PLAYER_APOLLYON_B then
+			Isaac.GetPlayer():AddMaxHearts(-2)
+		elseif options.currentCharacterID == PlayerType.PLAYER_THELOST_B then
+			Isaac.GetPlayer().AddCoins(Isaac.GetPlayer(), 1)
+		elseif options.currentCharacterID == PlayerType.PLAYER_KEEPER_B then
+			Isaac.GetPlayer().AddBombs(Isaac.GetPlayer(), 1)
+		elseif options.currentCharacterID == PlayerType.PLAYER_BETHANY_B then
+			Isaac.GetPlayer().AddSoulHearts(Isaac.GetPlayer(), 5)
+			Isaac.GetPlayer().SetBloodCharge(Isaac.GetPlayer(), 6)
+		elseif options.currentCharacterID == PlayerType.PLAYER_THEFORGOTTEN_B then
+			--The forgotten's skeletal body won't spawn in unless I change to jacob first
+			Isaac.GetPlayer().ChangePlayerType(Isaac.GetPlayer(), PlayerType.PLAYER_JACOB)
+			Isaac.GetPlayer().ChangePlayerType(Isaac.GetPlayer(), PlayerType.PLAYER_THEFORGOTTEN_B)
+			Isaac.GetPlayer():AddMaxHearts(-6)
+			Isaac.GetPlayer().AddSoulHearts(Isaac.GetPlayer(), 6)
+		end
+		
+		--Add forgotten soul hearts if needed.
+		
 		
 		--items
 		Isaac.ExecuteCommand("combo 0."..options.treasureItemCount) --Treasure Items
