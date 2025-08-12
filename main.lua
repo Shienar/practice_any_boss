@@ -7,7 +7,7 @@ local save = {}
 if ModConfigMenu then
     require("content.mcm")
 end
-
+--test
 local function saveData()
 	save.currentCharacter = options.currentCharacter
 	save.currentCharacterID = options.currentCharacterID
